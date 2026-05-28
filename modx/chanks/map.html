@@ -1,0 +1,91 @@
+<section class="sec sec--paper sec--tight">
+  <div class="shell">
+    <div class="sec__head">
+      <div>
+        <h2 class="display">[%admissions-committee%]</h2></div>
+      <div style="max-width: 340px; font-size: 14px; color: var(--u-ink-muted);">[%Write to us, give us a call, or stop by%]
+      </div>
+    </div>
+
+    <div class="contact-map">
+      <div id="udau-map" class="contact-map__map"></div>
+      <div class="contact-map__addresses">
+        <div class="contact-map__label">Корпуси</div>
+
+
+        <div class="contact-map__item active" data-lat="48.76707919474017" data-lng="30.234050765221774">
+          <div class="contact-map__name">[%admissions-committee%]</div>
+          <div class="contact-map__addr">вул. Інститутська, 1 (корпус 4, поверх 1, кабінет 174)<br>м. Умань, 20300</div>
+          <div class="contact-map__phone"><a href="tel:380674778085">+38(06747)7-80-85</a></div>
+          <div class="contact-map__phone"><a href="tel:380474430732">+38(04744)3-07-32</a></div>
+          <span class="contact-map__badge">Приймальна комісія</span>
+        </div>
+
+        <div class="contact-map__item active" data-lat="48.752941860705036" data-lng="30.23236713425695">
+          <div class="contact-map__name">[%Ped campus%]</div>
+          <div class="contact-map__addr">вул. Садова вулиця, 26<br>м. Умань, 20300</div>
+          <div class="contact-map__phone"><a href="tel:380474440520">+38(04744)4-05-20</a></div>
+          <span class="contact-map__badge">Приймальна комісія</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  (function () {
+    var items = document.querySelectorAll('.contact-map__item');
+    var map = L.map('udau-map').setView([48.7558, 30.2280], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    function makeIcon(active) {
+      return L.divIcon({
+        className: '',
+        html: '<div style="width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:' + (active ? '#1a3a6b' : '#2e6fc4') + ';border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)"></div>',
+        iconSize: [26, 26],
+        iconAnchor: [13, 26],
+        popupAnchor: [0, -28]
+      });
+    }
+
+    var markers = [];
+
+    items.forEach(function (item, i) {
+      var lat = parseFloat(item.dataset.lat);
+      var lng = parseFloat(item.dataset.lng);
+      var name = item.querySelector('.contact-map__name').textContent;
+      var addr = item.querySelector('.contact-map__addr').innerHTML.replace('<br>', ', ');
+
+      var marker = L.marker([lat, lng], { icon: makeIcon(i === 0) })
+              .addTo(map)
+              .bindPopup('<b style="font-size:13px">' + name + '</b><br><span style="font-size:12px;color:#666">' + addr + '</span>');
+
+      marker.on('click', function () { activate(i); });
+      markers.push(marker);
+
+      item.addEventListener('click', function () { activate(i); });
+    });
+
+    markers[0].openPopup();
+
+    function activate(i) {
+      items.forEach(function (el) { el.classList.remove('active'); });
+      markers.forEach(function (m, j) { m.setIcon(makeIcon(j === i)); });
+      items[i].classList.add('active');
+      markers[i].openPopup();
+      map.setView([
+        parseFloat(items[i].dataset.lat),
+        parseFloat(items[i].dataset.lng)
+      ], 16, { animate: true });
+      items[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  })();
+</script>

@@ -1,0 +1,119 @@
+<section class="hero hero--split">
+    <div class="shell">
+        <div class="hero__inner">
+            <div class="hero__grid">
+                <div>
+                    <div class="hero__chip"><span class="dot"></span> Вступна кампанія 2026 </div>
+                    <div class="eyebrow" style="margin-top: 32px;"><span class="bar"></span>Бакалаврат · Магістратура ·
+                        Аспірантура
+                    </div>
+                    <h1 class="display hero__h" style="margin-top: 20px;">Уманський<br>Університет.<br><span
+                            style="color: var(--u-blue-soft);">Твій</span> старт <span
+                            style="color: var(--u-yellow); -webkit-text-stroke: 1.5px var(--u-blue);">2026</span></h1>
+                    <p class="hero__lede" style="margin-top: 28px;">Університет без бар'єрів. Сучасний простір, де кожен
+                        студент проєктує власну кар'єру — а суспільство отримує лідерів нового покоління.</p>
+                    <!--  <div class="hero__ctas">
+                         <button class="btn btn--primary btn--lg">Подати документи <span class="arr">→</span></button>
+                         <button class="btn btn--ghost btn--lg">Як вступити</button>
+                     </div>  -->
+                </div>
+                <aside class="hero__panel">
+                    <div><span class="panel-tag">сьогодні · --</span>
+                        <h2 class="panel-h">До початку<br>прийому документів<br><span style="color: var(--u-yellow);">залишилось днів</span>
+                        </h2></div>
+                    <ul class="panel-list">
+                        <li><span class="lbl">Етап</span><span class="val">Основна сесія</span></li>
+                        <li><span class="lbl">Реєстрація ЕК</span><span class="val">з <span class="accent">01.07</span></span>
+                        </li>
+                        <li><span class="lbl">Прийом заяв</span><span class="val">до <span
+                                class="accent">1 серпня 18.00</span></span></li>
+                        <li><span class="lbl">Телефон</span><span class="val">[[DocInfo? &docid=`[%site-main%]` &field=`phone`]]</span></li>
+                    </ul>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="#calendar" class="btn btn--accent" style="flex: 1 1 0%; justify-content: center;">Календар вступу
+                        </a>
+                        <!-- <button class="btn btn--ghost-w" style="flex: 1 1 0%; justify-content: center;">FAQ</button> -->
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const DEADLINE = { day: 1, month: 8 };
+        const START    = { day: 1,  month: 7 };
+
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const year = now.getFullYear();
+
+        const deadline = new Date(year, DEADLINE.month - 1, DEADLINE.day);
+        const start    = new Date(year, START.month - 1,    START.day);
+
+        const diffDays = Math.round((deadline - now) / 86400000);
+
+        // --- Тег "сьогодні · DD місяць" ---
+        const panelTag = document.querySelector('.hero__panel .panel-tag');
+        if (panelTag) {
+            const months = [
+                'січня','лютого','березня','квітня','травня','червня',
+                'липня','серпня','вересня','жовтня','листопада','грудня'
+            ];
+            panelTag.textContent = `сьогодні · ${now.getDate()} ${months[now.getMonth()]}`;
+        }
+
+        // --- Заголовок із відліком ---
+        const panelH = document.querySelector('.hero__panel .panel-h');
+        if (panelH) {
+            let html;
+
+            if (diffDays > 0) {
+                html = `До початку<br>прийому документів<br>
+              <span style="color: var(--u-yellow);">залишилось ${pluralDays(diffDays)}</span>`;
+            } else if (diffDays === 0) {
+                html = `Останній день<br>прийому документів<br>
+              <span style="color: var(--u-yellow);">дедлайн сьогодні</span>`;
+            } else {
+                html = `Прийом документів<br>завершено<br>
+              <span style="color: var(--u-yellow);">${Math.abs(diffDays)} ${pluralDays(Math.abs(diffDays), true)} тому</span>`;
+            }
+
+            panelH.innerHTML = html;
+        }
+
+        // --- Етап (поточна фаза вступу) ---
+        const phaseVal = document.querySelector('.hero__panel .panel-list li:nth-child(1) .val');
+        if (phaseVal) {
+            phaseVal.textContent = getCurrentPhase(now, year);
+        }
+
+        // --- Допоміжні функції ---
+
+        function getCurrentPhase(date, yr) {
+            const phases = [
+                { label: 'Підготовчий етап',  from: new Date(yr, 5, 1),  to: new Date(yr, 5, 30) },
+                { label: 'Основна сесія',     from: new Date(yr, 6, 1),  to: new Date(yr, 6, 31) },
+                { label: 'Зарахування',       from: new Date(yr, 7, 1),  to: new Date(yr, 7, 8)  },
+                { label: 'Додаткова сесія',   from: new Date(yr, 7, 9),  to: new Date(yr, 7, 31) },
+            ];
+            const active = phases.find(p => date >= p.from && date <= p.to);
+            return active ? active.label : 'Підготовчий етап';
+        }
+
+        function pluralDays(n, genitive = false) {
+            const mod10  = n % 10;
+            const mod100 = n % 100;
+            if (genitive) {
+                if (mod100 >= 11 && mod100 <= 14) return 'днів';
+                if (mod10 === 1)  return 'день';
+                if (mod10 >= 2 && mod10 <= 4) return 'дні';
+                return 'днів';
+            }
+            if (mod100 >= 11 && mod100 <= 14) return `${n} днів`;
+            if (mod10 === 1)  return `${n} день`;
+            if (mod10 >= 2 && mod10 <= 4) return `${n} дні`;
+            return `${n} днів`;
+        }
+    });
+</script>

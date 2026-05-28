@@ -1,0 +1,18 @@
+<article class="news-card">
+  <div class="news-card__media news-card__media--blue">
+    <div class="deco">
+      <div class="overlay"></div>
+      <img src="[[getFirstPhoto? &photos=`[+photos+]`]]" alt="[+pagetitle+]">
+    </div>
+  </div>
+  <div class="news-card__body">
+    [[if? &is=`[*hide_date*]:empty` &then=`
+    <div class="news-card__date"> <span>[+date+]</span></div>
+    ` &else=` `]]
+    <h4>[+pagetitle+]</h4>
+    <div class="intro">[!truncate? &text=`[+content+]` &length=`150`!]</div>
+    <a href="[~[+id+]~]" class="more">[%read-more%]<span
+            style="font-size: 14px;">→</span>
+    </a>
+  </div>
+</article>

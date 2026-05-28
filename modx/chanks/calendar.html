@@ -1,0 +1,201 @@
+<section class="sec sec--blue" id="calendar">
+    <div class="shell">
+
+        <div class="sec__head">
+            <div>
+                <div class="eyebrow"><span class="bar"></span>Розклад вступу · 2026</div>
+                <h2>Ключові дати</h2>
+            </div>
+        </div>
+
+        <div class="tl-tabs" role="tablist">
+            <button role="tab" class="tl-tab is-on" data-target="bachelor" aria-selected="true">
+                <span class="tl-tab__lbl">Бакалаврат</span>
+                <span class="tl-tab__sub">На основі НМТ / атестата</span>
+            </button>
+            <button role="tab" class="tl-tab" data-target="master" aria-selected="false">
+                <span class="tl-tab__lbl">Магістратура</span>
+                <span class="tl-tab__sub">На основі ЄВІ / ЄВВ</span>
+            </button>
+            <button role="tab" class="tl-tab" data-target="phd" aria-selected="false">
+                <span class="tl-tab__lbl">Аспірантура</span>
+                <span class="tl-tab__sub">Доктор філософії · PhD</span>
+            </button>
+        </div>
+
+        <div class="tl is-on" data-pane="bachelor"></div>
+        <div class="tl" data-pane="master"></div>
+        <div class="tl" data-pane="phd"></div>
+
+    </div>
+
+    <script>
+        (function () {
+
+            const DATA = {
+                bachelor: [
+                    { date: "2026-07-03", label: "Початок реєстрації заяв на участь у співбесідах" },
+                    { date: "2026-07-19", label: "Реєстрація заяв вступників на участь у конкурсному відборі" },
+                    { date: "2026-08-01", label: "Завершення прийому документів" },
+                    { date: "2026-08-06", label: "Оприлюднення рейтингових списків (ЄДЕБО)" },
+                    { date: "2026-08-11", label: "Виконання вимог до зарахування" },
+                ],
+                master: [
+                    { date: "2026-04-23", label: "Реєстрація заяв на участь в ЄВІ та ЄФВВ" },
+                    { date: "2026-06-26", label: "Основна сесія ЄВІ та ЄФВВ" },
+                    { date: "2026-08-07", label: "Реєстрація заяв для участі в конкурсному відборі" },
+                    { date: "2026-08-25", label: "Оприлюднення списку рекомендованих (ЄДЕБО)" },
+                    { date: "2026-08-29", label: "Зарахування вступників" },
+                ],
+                phd: [
+                    { date: "2026-07-01", label: "Реєстрація електронних кабінетів" },
+                    { date: "2026-08-07", label: "Реєстрація заяв на конкурсний відбір" },
+                    { date: "2026-08-26", label: "Вступні випробування зі спеціальності", tag: "очно" },
+                    { date: "2026-09-08", label: "Рекомендації до зарахування" },
+                    { date: "2026-09-14", label: "Зарахування на навчання в аспірантурі" },
+                ],
+            };
+
+            function formatDate(iso) {
+                const [, m, d] = iso.split('-');
+                return `${d}.${m}`;
+            }
+
+            function findNowIdx(steps) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return steps.findIndex(s => new Date(s.date) >= today);
+            }
+
+            function render() {
+                Object.entries(DATA).forEach(([pane, steps]) => {
+                    const container = document.querySelector(`.tl[data-pane="${pane}"]`);
+                    if (!container) return;
+
+                    const nowIdx = findNowIdx(steps);
+
+                    container.innerHTML = steps.map((s, i) => `
+          <div class="tl__step${i === nowIdx ? ' is-now' : ''}">
+            <div class="tl__num">КРОК ${String(i + 1).padStart(2, '0')}</div>
+            <div class="tl__date">${formatDate(s.date)}</div>
+            <div class="tl__lbl">${s.label}</div>
+            ${s.tag ? `<div class="tl__tag">${s.tag}</div>` : ''}
+          </div>
+        `).join('');
+                });
+            }
+
+            // Tab switching
+            document.querySelectorAll('.tl-tab').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.target;
+                    document.querySelectorAll('.tl-tab').forEach(b => {
+                        const on = b === btn;
+                        b.classList.toggle('is-on', on);
+                        b.setAttribute('aria-selected', on ? 'true' : 'false');
+                    });
+                    document.querySelectorAll('.tl').forEach(pane => {
+                        pane.classList.toggle('is-on', pane.dataset.pane === target);
+                    });
+                });
+            });
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', render);
+            } else {
+                render();
+            }
+
+        })();
+    </script>
+
+    <style>
+        .tl-tabs {
+            display: flex; flex-wrap: wrap;
+            margin-bottom: 24px;
+            border-top: 1px solid rgba(255,255,255,.18);
+            border-bottom: 1px solid rgba(255,255,255,.18);
+        }
+        .tl-tab {
+            appearance: none;
+            background: transparent;
+            border: 0;
+            border-right: 1px solid rgba(255,255,255,.18);
+            padding: 18px 28px;
+            color: rgba(255,255,255,.65);
+            text-align: left;
+            cursor: pointer;
+            display: flex; flex-direction: column; gap: 4px;
+            min-width: 220px;
+            position: relative;
+            transition: background .15s ease, color .15s ease;
+        }
+        .tl-tab:hover { background: rgba(255,255,255,.05); color: #fff; }
+        .tl-tab__lbl {
+            font-family: var(--font-display);
+            font-weight: 800; font-size: 20px;
+            letter-spacing: -0.01em; line-height: 1.1;
+        }
+        .tl-tab__sub {
+            font-size: 11.5px; font-weight: 600;
+            letter-spacing: .1em; text-transform: uppercase; opacity: .7;
+        }
+        .tl-tab.is-on { color: #fff; background: var(--u-blue-deep); }
+        .tl-tab.is-on::before {
+            content: ""; position: absolute; left: 0; top: 0; right: 0;
+            height: 3px; background: var(--u-yellow);
+        }
+        .tl-tab.is-on .tl-tab__sub { color: var(--u-yellow); opacity: 1; }
+
+        .tl {
+            display: none;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,.18);
+        }
+        .tl.is-on {
+            display: grid;
+            animation: tlFade .35s ease;
+        }
+        @keyframes tlFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .tl__step {
+            padding: 32px 24px;
+            background: var(--u-blue);
+            position: relative;
+        }
+        .tl__step.is-now { background: var(--u-blue-deep); }
+        .tl__step.is-now::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: var(--u-yellow);
+        }
+        .tl__num {
+            font-family: var(--font-mono);
+            font-size: 12px; color: var(--u-yellow);
+            letter-spacing: .1em; font-weight: 600;
+        }
+        .tl__date {
+            font-family: var(--font-display);
+            font-size: 32px; margin-top: 16px;
+            letter-spacing: -0.02em; font-weight: 800;
+        }
+        .tl__lbl {
+            font-size: 14px; color: rgba(255,255,255,.8);
+            margin-top: 10px; line-height: 1.4;
+        }
+        .tl__tag {
+            display: inline-block; margin-top: 14px;
+            padding: 4px 8px;
+            background: var(--u-yellow); color: var(--u-blue);
+            font-size: 10.5px; letter-spacing: .1em;
+            text-transform: uppercase; font-weight: 800;
+        }
+        @media (max-width: 1080px) {
+            .tl { grid-template-columns: repeat(2, 1fr); }
+            .tl-tab { min-width: 50%; flex: 1; }
+        }
+    </style>
+
+</section>
