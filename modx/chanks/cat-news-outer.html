@@ -1,0 +1,34 @@
+<section class="wrap">
+  <div class=cat-new-wrap>
+    <div class="cat-news-block" id="cat-news-block">
+      [+ditto+]
+    </div>
+    <div class="sidebar">
+      [[NewsArchiveMenu? &dir=`[%news-dir%]`]]
+    </div>
+  </div>
+  [[if? &is=`[+cat-news_totalPages+]:eq:1` &then=` ` &else=`
+  <div class="pagination"><span>[%nav-pages%]</span> [+cat-news_previous+][+cat-news_pages+][+cat-news_next+]</div>
+  `]]
+</section>
+
+<script>
+  document.querySelectorAll('.news-archive__year-toggle').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var months = this.nextElementSibling;
+      var isOpen = this.classList.contains('is-open');
+
+      // Закрити всі відкриті
+      document.querySelectorAll('.news-archive__year-toggle.is-open').forEach(function(openBtn) {
+        openBtn.classList.remove('is-open');
+        openBtn.nextElementSibling.classList.remove('is-open');
+      });
+
+      // Відкрити поточний якщо був закритий
+      if (!isOpen) {
+        this.classList.add('is-open');
+        months.classList.add('is-open');
+      }
+    });
+  });
+</script>
