@@ -64,7 +64,7 @@ foreach ($rows as $r) {
         $out .= "<button class=\"news-archive__year-toggle{$isOpenYear}\" type=\"button\">";
         $out .= "<span class=\"news-archive__year-label\">{$y}</span>";
         // лічильник рахуй окремо
-        $out .= "<span class=\"news-archive__year-count\">{$ycnt}</span>";
+        $out .= "<span class=\"news-archive__year-count\">{$ycnt}</span>";javascript:;
         $out .= '<span class="news-archive__chevron"><i class="bi bi-arrow-down-short"></i></span>';
         $out .= '</button>';
         $out .= "<ul class=\"news-archive__months{$isOpenYear}\">";
@@ -81,4 +81,26 @@ foreach ($rows as $r) {
 if ($prevY !== null) $out .= '</ul></li>';
 
 $out .= '</nav>';
+
+
+if ($activeY) {
+    if ($activeM) {
+        $yUrl  = $modx->makeUrl($pageId, '', "{$dittoId}year={$activeY}");
+        $crumb = " &raquo; <a href=\"{$yUrl}\">{$activeY}</a>"
+            . " &raquo; <span>{$months_ua[$activeM]} {$activeY}</span>";
+    } else {
+        $crumb = " &raquo; <span>{$activeY}</span>";
+    }
+    $crumbJs = json_encode($crumb, JSON_UNESCAPED_UNICODE);
+    $out .= <<<HTML
+<script>
+(function(){
+  var bc = document.querySelector('.b-breadcrumbs .B_crumbBox') || document.querySelector('.breadcrumbs .B_crumbBox');
+  if (bc) bc.insertAdjacentHTML('beforeend', {$crumbJs});
+})();
+</script>
+HTML;
+}
+
+
 return $out;

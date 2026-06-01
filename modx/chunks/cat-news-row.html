@@ -1,0 +1,14 @@
+<article>
+    [+article-image+]
+    <h2>[+pagetitle+]</h2>
+
+    <div>[+news-date+]</div>
+    [[If?
+        &subject=`[+short-descr+]`
+        &operator=`empty`
+        &then=`[!truncate? &text=`[+content+]` &length=`200`!].`
+        &else=`[+short-descr+]`
+    ]]
+    <p><a class="button" href="[~[+id+]~]" title="[+pagetitle+]">[%read-more%]</a></p>
+    <div class="clear"></div>
+</article>
