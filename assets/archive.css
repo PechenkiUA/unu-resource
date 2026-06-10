@@ -1,0 +1,292 @@
+
+.shell{ max-width: 1320px; margin: 0 auto; padding: 0 32px; }
+
+/* ─── Page layout ─── */
+.npage{ padding: 72px 0 96px; }
+.npage__grid{
+    display:grid;
+    grid-template-columns: 1fr 360px;
+    gap: 56px;
+    align-items: start;
+}
+
+/* ─── Page head ─── */
+.npage__head{ margin-bottom: 36px; }
+.npage__title{
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    color: var(--u-blue);
+    margin: 0;
+}
+.npage__date{
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--u-ink);
+    display:inline-flex; align-items:center; gap: 12px;
+}
+.npage__date::before{
+    content:""; width: 28px; height: 3px; background: var(--u-yellow);
+}
+
+/* ─── Feed (left) ─── */
+.feed{ display:flex; flex-direction: column; border-top: 2px solid var(--u-blue); }
+.feed__item{
+    display:grid;
+    grid-template-columns: 80px 1fr;
+    gap: 18px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--u-line);
+
+    position: relative;
+}
+.feed__time{
+    font-family: var(--font-mono);
+    font-size: 13px; font-weight: 600;
+    color: var(--u-ink-faint);
+    letter-spacing: .02em;
+    padding-top: 3px;
+}
+.feed__body h3{
+    margin: 0;
+    font-size: 20px; font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--u-blue);
+    transition: color .15s ease;
+}
+.feed__body p{
+    margin: 8px 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--u-ink-muted);
+    max-width: 70ch;
+}
+.feed__item::before{
+    content:""; position:absolute; left: -16px; top: 22px; bottom: 22px;
+    width: 3px; background: var(--u-yellow);
+    transform: scaleY(0); transform-origin: center;
+    transition: transform .2s ease;
+}
+.feed__item:hover::before{ transform: scaleY(1); }
+.feed__item:hover .feed__body h3{ color: var(--u-blue-deep); }
+.feed__item:hover .feed__time{ color: var(--u-blue); }
+.feed__item.is-lead .feed__body h3{ font-weight: 800; }
+/* MODX Evolution: перший рядок стрічки робимо «головним» без окремого чанка */
+.feed__item:first-child .feed__body h3{ font-weight: 800; }
+
+/* ─── Right rail ─── */
+.rail{ display:flex; flex-direction: column; gap: 40px; }
+.rail__title{
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--u-blue);
+    margin: 0 0 18px;
+    display:flex; align-items:center; justify-content: space-between;
+}
+.feed__item_tag {
+    background: var(--u-yellow);
+    padding: 0 5px;
+}
+/* ─── Calendar archive ─── */
+.cal{
+    border: 1px solid var(--u-line);
+    background: var(--u-paper);
+}
+.cal__bar{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--u-line);
+}
+.cal__month{
+    font-family: var(--font-display);
+    font-weight: 800; font-size: 14px;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--u-blue);
+}
+.cal__nav{ display:flex; gap: 6px; }
+.cal__nav button{
+    width: 32px; height: 32px;
+    border: 1px solid var(--u-line);
+    background: var(--u-paper);
+    color: var(--u-blue);
+    font-size: 15px; font-weight: 700;
+    cursor: pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.cal__nav button:hover{ background: var(--u-blue); color: #fff; border-color: var(--u-blue); }
+
+.cal__grid{
+    display:grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.cal__dow{
+    text-align:center;
+    font-family: var(--font-mono);
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
+    color: var(--u-ink-faint);
+    padding: 12px 0 8px;
+}
+.cal__cell{
+    position: relative;
+    aspect-ratio: 1 / 1;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 14px; font-weight: 600;
+    color: var(--u-ink-soft);
+    border: 1px solid transparent;
+    cursor: default;
+}
+.cal__cell.is-empty{ color: transparent; }
+.cal__cell.has-news{
+    color: var(--u-blue);
+    font-weight: 800;
+    cursor: pointer;
+}
+.cal__cell.has-news::after{
+    content:""; position:absolute; bottom: 7px; left: 50%; transform: translateX(-50%);
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--u-yellow);
+}
+.cal__cell.has-news:hover{ background: var(--u-paper-2); }
+.cal__cell.is-today{
+    border: 2px solid var(--u-blue);
+    color: var(--u-blue);
+    font-weight: 800;
+}
+.cal__cell.is-today.has-news::after{ background: var(--u-blue); }
+
+/* year jump strip */
+.cal__years{
+    display:flex; flex-wrap: wrap; gap: 0;
+    border-top: 1px solid var(--u-line);
+}
+.cal__year{
+    flex: 1;
+    display:flex; align-items:center; justify-content: space-between;
+    gap: 8px;
+    padding: 9px 14px;
+    font-size: 12.5px; font-weight: 700;
+    color: var(--u-blue);
+    border-right: 1px solid var(--u-line);
+    border-bottom: 1px solid var(--u-line);
+    min-width: 50%;
+    cursor: pointer;
+    transition: background .15s ease;
+}
+.cal__year:hover{ background: var(--u-paper-2); }
+.cal__year .n{
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 600;
+    background: var(--u-blue); color: #fff;
+    padding: 2px 8px;
+    min-width: 30px; text-align:center;
+}
+
+/* ─── Editor's pick (rail) ─── */
+.epick__card{
+    position: relative;
+    display:flex; flex-direction: column;
+    background: var(--u-blue);
+    overflow: hidden;
+    cursor: default;
+}
+.epick__media{ display:block; width: 100%; height: 220px; }
+.epick__media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.epick__overlay{ position: relative; padding: 24px 24px 26px; }
+.epick__overlay::before{
+    content:""; position:absolute; left: 0; top: 0; width: 56px; height: 4px;
+    background: var(--u-yellow);
+}
+.epick__overlay h4{
+    font-family: var(--font-display);
+    font-weight: 800; font-size: 21px;
+    line-height: 1.15; letter-spacing: -0.01em;
+    color: #fff; margin: 0;
+    text-wrap: balance;
+}
+.epick__meta{
+    margin-top: 14px;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--u-yellow);
+}
+
+/* ─── Articles (rail) ─── */
+.arts{ display:flex; flex-direction: column; border-top: 2px solid var(--u-blue); }
+.arts__item{
+    padding: 16px 0;
+    border-bottom: 1px solid var(--u-line);
+    cursor: default;
+    position: relative;
+}
+.arts__item h5{
+    margin: 0;
+    font-size: 15.5px; font-weight: 700;
+    line-height: 1.3; color: var(--u-blue);
+    letter-spacing: -0.005em;
+    transition: color .15s ease;
+}
+.arts__item .who{
+    margin-top: 6px;
+    font-size: 12px; color: var(--u-ink-muted);
+    font-weight: 600;
+}
+.arts__item::before{
+    content:""; position:absolute; left: -16px; top: 16px; bottom: 16px;
+    width: 3px; background: var(--u-yellow);
+    transform: scaleY(0); transform-origin: center;
+    transition: transform .2s ease;
+}
+.arts__item:hover::before{ transform: scaleY(1); }
+.arts__item:hover h5{ color: var(--u-blue-deep); }
+
+/* ─── Pagination ─── */
+.pager{
+    margin-top: 48px;
+    display:flex; flex-wrap: wrap; align-items:center; gap: 6px;
+    border-top: 1px solid var(--u-line);
+    padding-top: 28px;
+}
+.pager__lbl{
+    font-size: 12px; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--u-ink-muted);
+    margin-right: 8px;
+}
+.pager a{
+    min-width: 34px; height: 34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding: 0 8px;
+    font-size: 13px; font-weight: 700;
+    color: var(--u-blue);
+    border: 1px solid var(--u-line);
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.pager a:hover{ background: var(--u-paper-2); }
+.pager a.is-on{ background: var(--u-blue); color: #fff; border-color: var(--u-blue); }
+.pager a.next{ font-weight: 800; letter-spacing: .04em; padding: 0 14px; }
+.pager a.prev{ font-weight: 800; letter-spacing: .04em; padding: 0 14px; }
+.pager a.is-on{ cursor: default; }
+.pager__gap{
+    min-width: 20px; height: 34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color: var(--u-ink-faint); font-weight: 700; font-size: 13px;
+}
+
+@media (max-width: 1080px){
+    .npage__grid{ grid-template-columns: 1fr; gap: 48px; }
+    .rail{ max-width: 520px; }
+}
