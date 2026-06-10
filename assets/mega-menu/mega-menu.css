@@ -456,10 +456,12 @@
         padding:0;
     }
 
-
     .wrap-brand .brand__name {
         font-size: 0.7rem;
-        max-width: 218px;
+        max-width: 280px;
+    }
+    .wrap-brand img {
+        max-width: 115px;
     }
 
     .menu-main > ul > li{
@@ -542,6 +544,9 @@ a.button:hover {
     .header-v2{
         .wrap-brand img {
             max-width: 70px;
+        }
+        .shell {
+            padding: 0 5px;
         }
     }
 
