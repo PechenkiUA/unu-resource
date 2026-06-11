@@ -95,8 +95,8 @@
     display:flex; align-items:center; justify-content: space-between;
 }
 .feed__item_tag {
-    background: var(--u-yellow);
-    padding: 0 5px;
+    /*background: var(--u-yellow);*/
+    /*padding: 0 5px;*/
 }
 /* ─── Calendar archive ─── */
 .cal{
