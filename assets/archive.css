@@ -1,4 +1,3 @@
-
 .shell{ max-width: 1320px; margin: 0 auto; padding: 0 32px; }
 
 /* ─── Page layout ─── */
@@ -32,9 +31,7 @@
     color: var(--u-ink);
     display:inline-flex; align-items:center; gap: 12px;
 }
-.npage__date::before{
-    content:""; width: 28px; height: 3px; background: var(--u-yellow);
-}
+
 
 /* ─── Feed (left) ─── */
 .feed{ display:flex; flex-direction: column; border-top: 2px solid var(--u-blue); }
@@ -97,6 +94,23 @@
 .feed__item_tag {
     /*background: var(--u-yellow);*/
     /*padding: 0 5px;*/
+}
+.cal__sources {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap:5px;
+    margin: 5px;
+}
+
+.cal__sources .cal__src{
+    background: var(--u-blue);
+    color: white;
+    padding: 5px;
+
+}
+.cal__sources .cal__src.is-on{
+    background: var(--u-yellow);
+    color: black;
 }
 /* ─── Calendar archive ─── */
 .cal{

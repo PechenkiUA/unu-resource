@@ -62,10 +62,15 @@
             }, 140);
         });
 
-        /* клавіатура: фокус усередині тримає панель відкритою */
-        li.addEventListener("focusin", function(){ if (hasMega) li.classList.add("is-open"); });
-        li.addEventListener("focusout", function(e){ if (!li.contains(e.relatedTarget)) li.classList.remove("is-open"); });
-
+        /* клавіатура: фокус усередині тримає панель відкритою (лише десктоп) */
+        li.addEventListener("focusin", function(){
+            if (!window.matchMedia(DESKTOP).matches) return;
+            if (hasMega) li.classList.add("is-open");
+        });
+        li.addEventListener("focusout", function(e){
+            if (!window.matchMedia(DESKTOP).matches) return;
+            if (!li.contains(e.relatedTarget)) li.classList.remove("is-open");
+        });
         /* тач / вузький екран: клік по розділу з панеллю — тогл, без переходу */
         if (hasMega && link){
             link.addEventListener("click", function(e){

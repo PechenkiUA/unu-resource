@@ -1,0 +1,45 @@
+name: pagelinks
+Type: multiTV
+
+Template: Головна сторінка
+
+
+Створити файли
+ /assets/tvs/multitv/configs/pagelinks.config.inc.php
+ ==
+ <?php
+ $settings['display'] = 'vertical';
+ $settings['fields'] = array(
+     'image' => array(
+         'caption' => 'Фото',
+         'type' => 'image'
+     ),
+     'thumb' => array(
+         'caption' => 'Thumbnail',
+         'type' => 'thumb',
+         'thumbof' => 'image'
+     ),
+     'title' => array(
+         'caption' => 'Заголовок',
+         'type' => 'text'
+     ),
+     'alt' => array(
+         'caption' => 'Підпис фото',
+         'type' => 'text'
+     ),
+     'link' => array(
+         'caption' => 'Посилання на сторінку',
+         'type' => 'text'
+     ),
+     'winnew' => array(
+         'caption' => 'Відкрити в новому вікні',
+         'type' => 'checkbox',
+         'elements' => 'Да==1'
+     )
+ );
+
+ $settings['configuration'] = array(
+     'enablePaste' => false,
+     'enableClear' => true
+ );
+===
